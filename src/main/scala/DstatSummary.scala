@@ -5,11 +5,10 @@ object DstatSummary {
     val dstatPath = args.headOption.getOrElse(sys.error("引数が必要です"))
     println(dstatPath)
     val dstatFile = Source.fromFile(dstatPath).getLines()
-    val dstatWithoutHeader = dstatFile.zipWithIndex.filter({ case (str: String, index: Int) => index > 1 }).map(_._1)
+    val dstatWithoutHeader = dstatFile.zipWithIndex.filter({ case (_: String, index: Int) => index > 1 }).map(_._1)
     val dstatSummary = dstatWithoutHeader.map(Record.apply)
 
     val withoutIdl100 = filterCpuUsageIdl100(dstatSummary.toSeq)
-
 
     val cpuAverage = CpuUsage.cpuUsageAverage(withoutIdl100.map(_.cpuUsage))
 
@@ -24,7 +23,6 @@ object DstatSummary {
       """.stripMargin)
 
   }
-
 
   def filterCpuUsageIdl100(records: Seq[Record]): Seq[Record] = records.filterNot(_.cpuUsage.idl.value == 100)
 

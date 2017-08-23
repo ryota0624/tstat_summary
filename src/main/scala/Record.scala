@@ -84,7 +84,7 @@ sealed trait LoadAvg extends Ordered[LoadAvg] {
 
 object LoadAvg {
   def allTimeLAFromString(str: String): (LoadAvg1, LoadAvg5, LoadAvg15) = {
-    val values = str.split(""" """).map(_.toFloat)
+    val values = str.split(""" """).filter(_.length > 0).map(_.toFloat)
     (LoadAvg1(values(0)), LoadAvg5(values(1)), LoadAvg15(values(2)))
   }
 
